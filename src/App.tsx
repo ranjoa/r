@@ -6,12 +6,11 @@
 import React, { useState, useMemo } from 'react';
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, 
-  PieChart, Pie, Cell, Treemap, LabelList
+  PieChart, Pie, Cell, LabelList
 } from 'recharts';
 import { 
-  Users, ShieldAlert, Target, Eye, Filter, 
-  ChevronDown, LayoutDashboard, Info, AlertTriangle, CheckCircle2,
-  TrendingUp, Lock, Sun, Moon
+  Users, ShieldAlert, Lock, Filter, 
+  ChevronDown, LayoutDashboard, TrendingUp, Moon
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { MOCK_DATA } from './constants';
@@ -33,19 +32,6 @@ const CHART_PALETTE = [COLORS.blue, COLORS.purple, COLORS.lightBlue, COLORS.gray
 export default function App() {
   const [selectedMajor, setSelectedMajor] = useState<string>('الكل');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
-
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
-    document.documentElement.classList.toggle('dark');
-  };
-
-  const themeColors = {
-    card: isDarkMode ? '#1e293b' : '#ffffff',
-    text: isDarkMode ? '#f1f5f9' : '#1e3a8a',
-    border: isDarkMode ? '#334155' : '#e2e8f0',
-    tooltip: isDarkMode ? '#1e293b' : '#ffffff',
-  };
 
   const filteredData = useMemo(() => {
     if (selectedMajor === 'الكل') return MOCK_DATA;
@@ -70,7 +56,6 @@ export default function App() {
   // Chart Data Preparation
   const attackVectorData = useMemo(() => {
     const counts: Record<string, number> = {};
-    // Initialize with 0 for all vectors to ensure they show up even if 0%
     ATTACK_VECTORS.forEach(v => counts[v] = 0);
     
     filteredData.forEach(d => {
@@ -122,7 +107,7 @@ export default function App() {
       <header className="max-w-7xl mx-auto mb-12 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 border-b border-border-gray/30 pb-8">
         <div className="flex items-center gap-6">
           <div className="text-right">
-            <h1 className="text-3xl font-arabic font-bold tracking-tight text-[var(--text-main)]">
+            <h1 className="text-3xl font-arabic font-bold tracking-tight text-brand-blue">
               تقرير التجربة الاجتماعية <span className="text-brand-purple">Next2026</span>
             </h1>
             <p className="opacity-60 text-sm font-arabic mt-1">لوحة بيانات تحليل الوعي السيبراني والنتائج الإحصائية</p>
@@ -130,20 +115,11 @@ export default function App() {
         </div>
 
         <div className="flex items-center gap-4 w-full md:w-auto">
-          {/* Dark Mode Toggle */}
-          <button 
-            onClick={toggleDarkMode}
-            className="p-3 bg-[var(--stat-bg)] border border-[var(--card-border)] rounded-xl hover:opacity-80 transition-all text-[var(--text-main)]"
-            title={isDarkMode ? "الوضع الفاتح" : "الوضع الداكن"}
-          >
-            {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-          </button>
-
           {/* Filter Slicer */}
           <div className="relative flex-1 md:flex-none">
             <button 
               onClick={() => setIsFilterOpen(!isFilterOpen)}
-              className="w-full md:w-64 flex items-center justify-between gap-3 px-6 py-3 bg-[var(--stat-bg)] border border-[var(--card-border)] rounded-xl hover:opacity-80 transition-all group text-[var(--text-main)]"
+              className="w-full md:w-64 flex items-center justify-between gap-3 px-6 py-3 bg-[#f8fafc] border border-gray-200 rounded-xl hover:opacity-80 transition-all group text-brand-blue"
             >
               <div className="flex items-center gap-2">
                 <Filter className="w-4 h-4 text-brand-purple" />
@@ -158,12 +134,12 @@ export default function App() {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 10 }}
-                  className="absolute right-0 mt-2 w-full md:w-64 bg-[var(--card-bg)] border border-[var(--card-border)] rounded-xl overflow-hidden z-50 shadow-xl"
+                  className="absolute right-0 mt-2 w-full md:w-64 bg-white border border-gray-200 rounded-xl overflow-hidden z-50 shadow-xl"
                 >
                   <div className="p-2">
                     <button 
                       onClick={() => { setSelectedMajor('الكل'); setIsFilterOpen(false); }}
-                      className={`w-full text-right px-4 py-2 rounded-lg transition-colors font-arabic ${selectedMajor === 'الكل' ? 'bg-brand-purple/10 text-brand-purple' : 'hover:bg-[var(--stat-bg)]'}`}
+                      className={`w-full text-right px-4 py-2 rounded-lg transition-colors font-arabic ${selectedMajor === 'الكل' ? 'bg-brand-purple/10 text-brand-purple' : 'hover:bg-gray-50'}`}
                     >
                       الكل
                     </button>
@@ -171,7 +147,7 @@ export default function App() {
                       <button 
                         key={major}
                         onClick={() => { setSelectedMajor(major); setIsFilterOpen(false); }}
-                        className={`w-full text-right px-4 py-2 rounded-lg transition-colors font-arabic ${selectedMajor === major ? 'bg-brand-purple/10 text-brand-purple' : 'hover:bg-[var(--stat-bg)]'}`}
+                        className={`w-full text-right px-4 py-2 rounded-lg transition-colors font-arabic ${selectedMajor === major ? 'bg-brand-purple/10 text-brand-purple' : 'hover:bg-gray-50'}`}
                       >
                         {major}
                       </button>
@@ -248,23 +224,19 @@ export default function App() {
                   </Pie>
                   <Tooltip 
                     contentStyle={{ 
-                      backgroundColor: themeColors.tooltip, 
-                      border: `1px solid ${themeColors.border}`, 
+                      backgroundColor: '#fff', 
+                      border: '1px solid #e2e8f0', 
                       borderRadius: '12px', 
                       textAlign: 'right', 
-                      fontSize: '12px',
-                      color: themeColors.text
+                      fontSize: '12px'
                     }}
-                    itemStyle={{ color: themeColors.text }}
                   />
                   <Legend 
                     verticalAlign="bottom" 
                     align="center"
                     iconType="circle"
                     wrapperStyle={{ paddingTop: '20px' }}
-                    formatter={(value) => {
-                      return <span className="font-arabic text-[11px] opacity-70 font-bold" style={{ color: themeColors.text }}>{value}</span>;
-                    }}
+                    formatter={(value) => <span className="font-arabic text-[11px] opacity-70 font-bold text-brand-blue">{value}</span>}
                   />
                 </PieChart>
               </ResponsiveContainer>
@@ -282,22 +254,16 @@ export default function App() {
                 <BarChart data={vigilanceData} layout="vertical" margin={{ right: 20, left: 20 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" horizontal={false} opacity={0.3} />
                   <XAxis type="number" hide />
-                  <YAxis 
-                    dataKey="name" 
-                    type="category" 
-                    hide
-                  />
+                  <YAxis dataKey="name" type="category" hide />
                   <Tooltip 
-                    cursor={{ fill: isDarkMode ? 'rgba(255,255,255,0.05)' : '#f8fafc' }}
+                    cursor={{ fill: '#f8fafc' }}
                     contentStyle={{ 
-                      backgroundColor: themeColors.tooltip, 
-                      border: `1px solid ${themeColors.border}`, 
+                      backgroundColor: '#fff', 
+                      border: '1px solid #e2e8f0', 
                       borderRadius: '12px', 
                       textAlign: 'right', 
-                      fontSize: '12px',
-                      color: themeColors.text
+                      fontSize: '12px'
                     }}
-                    itemStyle={{ color: themeColors.text }}
                   />
                   <Bar dataKey="value" radius={[8, 0, 0, 8]} barSize={25}>
                     {vigilanceData.map((entry, index) => (
@@ -310,7 +276,7 @@ export default function App() {
                 {vigilanceData.map((d, i) => (
                   <div key={i} className="flex items-center gap-2">
                     <div className="w-3 h-3 rounded-full" style={{ backgroundColor: CHART_PALETTE[(i + 2) % CHART_PALETTE.length] }} />
-                    <span className="font-arabic text-[11px] opacity-70 font-bold" style={{ color: themeColors.text }}>{d.name}: {Math.round(d.value * 100 / stats.total)}%</span>
+                    <span className="font-arabic text-[11px] opacity-70 font-bold text-brand-blue">{d.name}: {Math.round(d.value * 100 / stats.total)}%</span>
                   </div>
                 ))}
               </div>
@@ -353,23 +319,19 @@ export default function App() {
                   </Pie>
                   <Tooltip 
                     contentStyle={{ 
-                      backgroundColor: themeColors.tooltip, 
-                      border: `1px solid ${themeColors.border}`, 
+                      backgroundColor: '#fff', 
+                      border: '1px solid #e2e8f0', 
                       borderRadius: '12px', 
                       textAlign: 'right', 
-                      fontSize: '12px',
-                      color: themeColors.text
+                      fontSize: '12px'
                     }}
-                    itemStyle={{ color: themeColors.text }}
                   />
                   <Legend 
                     verticalAlign="bottom" 
                     align="center"
                     iconType="circle"
                     wrapperStyle={{ paddingTop: '20px' }}
-                    formatter={(value) => {
-                      return <span className="font-arabic text-[11px] opacity-70 font-bold" style={{ color: themeColors.text }}>{value}</span>;
-                    }}
+                    formatter={(value) => <span className="font-arabic text-[11px] opacity-70 font-bold text-brand-blue">{value}</span>}
                   />
                 </PieChart>
               </ResponsiveContainer>
@@ -389,14 +351,12 @@ export default function App() {
                   <YAxis dataKey="name" type="category" hide />
                   <Tooltip 
                     contentStyle={{ 
-                      backgroundColor: themeColors.tooltip, 
-                      border: `1px solid ${themeColors.border}`, 
+                      backgroundColor: '#fff', 
+                      border: '1px solid #e2e8f0', 
                       borderRadius: '12px', 
                       textAlign: 'right', 
-                      fontSize: '12px',
-                      color: themeColors.text
+                      fontSize: '12px'
                     }}
-                    itemStyle={{ color: themeColors.text }}
                     formatter={(value: number) => `${Math.round(value * 100 / stats.total)}%`}
                   />
                   <Bar dataKey="نعم في أغلب المواقع" stackId="a" fill={COLORS.red} radius={[4, 0, 0, 4]} />
@@ -411,9 +371,9 @@ export default function App() {
                   const percentage = Math.round(val * 100 / stats.total);
                   const colors = [COLORS.red, COLORS.purple, COLORS.green];
                   return (
-                    <div key={key} className="flex items-center gap-2" dir="rtl">
+                    <div key={key} className="flex items-center gap-2">
                       <div className="w-3 h-3 rounded-full" style={{ backgroundColor: colors[i] }} />
-                      <span className="font-arabic text-[11px] opacity-70 font-bold whitespace-nowrap" style={{ color: themeColors.text }}>
+                      <span className="font-arabic text-[11px] opacity-70 font-bold whitespace-nowrap text-brand-blue">
                         {key}: {percentage}%
                       </span>
                     </div>
@@ -434,22 +394,13 @@ export default function App() {
                 <BarChart data={awarenessImpactData} layout="vertical" margin={{ right: 20, left: 20 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" horizontal={false} opacity={0.3} />
                   <XAxis type="number" hide />
-                  <YAxis 
-                    dataKey="name" 
-                    type="category" 
-                    hide
-                  />
+                  <YAxis dataKey="name" type="category" hide />
                   <Tooltip 
-                    cursor={{ fill: isDarkMode ? 'rgba(255,255,255,0.05)' : '#f8fafc' }}
                     contentStyle={{ 
-                      backgroundColor: themeColors.tooltip, 
-                      border: `1px solid ${themeColors.border}`, 
                       borderRadius: '12px', 
                       textAlign: 'right', 
                       fontSize: '12px',
-                      color: themeColors.text
                     }}
-                    itemStyle={{ color: themeColors.text }}
                   />
                   <Bar dataKey="value" radius={[8, 0, 0, 8]} barSize={30}>
                     {awarenessImpactData.map((entry, index) => (
@@ -462,7 +413,7 @@ export default function App() {
                 {awarenessImpactData.map((d, i) => (
                   <div key={i} className="flex items-center gap-2">
                     <div className="w-3 h-3 rounded-full" style={{ backgroundColor: CHART_PALETTE[i % CHART_PALETTE.length] }} />
-                    <span className="font-arabic text-[11px] opacity-70 font-bold" style={{ color: themeColors.text }}>{d.name}: {Math.round(d.value * 100 / stats.total)}%</span>
+                    <span className="font-arabic text-[11px] opacity-70 font-bold text-brand-blue">{d.name}</span>
                   </div>
                 ))}
               </div>
@@ -470,12 +421,12 @@ export default function App() {
           </ChartContainer>
 
           {/* Conclusion Section */}
-          <div className="bg-[var(--card-bg)] rounded-3xl p-10 flex flex-col justify-center space-y-8 border border-[var(--card-border)] card-shadow">
-            <div className="flex items-center gap-4 border-b border-[var(--card-border)] pb-6">
+          <div className="bg-white rounded-3xl p-10 flex flex-col justify-center space-y-8 border border-gray-100 card-shadow">
+            <div className="flex items-center gap-4 border-b border-gray-100 pb-6">
               <div className="p-2 bg-brand-blue/5 rounded-xl">
                 <LayoutDashboard className="text-brand-purple w-5 h-5" />
               </div>
-              <h3 className="text-2xl font-arabic font-bold text-[var(--text-main)]">الخلاصة</h3>
+              <h3 className="text-2xl font-arabic font-bold text-brand-blue">الخلاصة</h3>
             </div>
             <div className="space-y-6 opacity-70 leading-[1.15] font-arabic text-right">
               <div className="flex items-start gap-6 pr-2">
@@ -500,7 +451,7 @@ export default function App() {
         <div className="px-4 py-2 rounded-xl bg-brand-purple/5 border border-brand-purple/10 flex items-center justify-center shadow-sm">
           <span className="text-brand-purple font-bold text-sm tracking-wider">Made by Rana</span>
         </div>
-        <p className="opacity-40 text-sm font-arabic">
+        <p className="opacity-40 text-sm font-arabic text-brand-blue">
           &copy; 2026 مشروع NEXT | مبادرة تعزيز الوعي بالأمن السيبراني | جميع الحقوق محفوظة
         </p>
       </footer>
@@ -512,15 +463,15 @@ function StatCard({ icon, label, value, subtext }: { icon: React.ReactNode, labe
   return (
     <motion.div 
       whileHover={{ y: -2 }}
-      className="bg-[var(--card-bg)] border border-[var(--card-border)] rounded-2xl p-6 flex flex-col items-center text-center card-shadow transition-all"
+      className="bg-white border border-gray-100 rounded-2xl p-6 flex flex-col items-center text-center card-shadow transition-all"
     >
-      <div className="p-2 bg-[var(--stat-bg)] rounded-xl mb-4">
+      <div className="p-2 bg-gray-50 rounded-xl mb-4">
         {icon}
       </div>
       <div className="space-y-1">
-        <p className="opacity-60 text-xs font-arabic font-medium uppercase tracking-wider">{label}</p>
-        <h4 className="text-4xl font-arabic font-bold text-[var(--text-main)]">{value}</h4>
-        <p className="opacity-40 text-[10px] font-arabic">{subtext}</p>
+        <p className="opacity-60 text-xs font-arabic font-medium uppercase tracking-wider text-brand-blue">{label}</p>
+        <h4 className="text-4xl font-arabic font-bold text-brand-blue">{value}</h4>
+        <p className="opacity-40 text-[10px] font-arabic text-brand-blue">{subtext}</p>
       </div>
     </motion.div>
   );
@@ -532,17 +483,17 @@ function ChartContainer({ title, subtitle, description, children }: { title: str
       initial={{ opacity: 0, y: 10 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      className="bg-[var(--card-bg)] border border-[var(--card-border)] rounded-3xl p-8 flex flex-col card-shadow"
+      className="bg-white border border-gray-100 rounded-3xl p-8 flex flex-col card-shadow"
     >
       <div className="mb-10 text-right">
-        <h3 className="text-xl font-arabic font-bold text-[var(--text-main)] mb-1">{title}</h3>
-        <p className="text-xs opacity-40 font-arabic">{subtitle}</p>
+        <h3 className="text-xl font-arabic font-bold text-brand-blue mb-1">{title}</h3>
+        <p className="text-xs opacity-40 font-arabic text-brand-blue">{subtitle}</p>
       </div>
       <div className="flex-1 min-h-[300px]">
         {children}
       </div>
-      <div className="mt-8 pt-6 border-t border-[var(--card-border)] text-right">
-        <p className="text-[11px] opacity-50 font-arabic leading-relaxed">{description}</p>
+      <div className="mt-8 pt-6 border-t border-gray-100 text-right">
+        <p className="text-[11px] opacity-50 font-arabic leading-relaxed text-brand-blue">{description}</p>
       </div>
     </motion.div>
   );

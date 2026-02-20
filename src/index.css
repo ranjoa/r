@@ -11,27 +11,11 @@
   --color-pure-white: #ffffff;
   --color-light-gray: #f8fafc;
   --color-border-gray: #e2e8f0;
-
-  --bg-main: var(--color-pure-white);
-  --text-main: var(--color-brand-blue);
-  --card-bg: #ffffff;
-  --card-border: var(--color-border-gray);
-  --stat-bg: var(--color-light-gray);
-}
-
-.dark {
-  --bg-main: #0f172a;
-  --text-main: #f1f5f9;
-  --card-bg: #1e293b;
-  --card-border: #334155;
-  --stat-bg: #334155;
-  --color-brand-blue: #94a3b8;
-  --color-border-gray: #334155;
 }
 
 @layer base {
   body {
-    @apply bg-[var(--bg-main)] text-[var(--text-main)] font-sans antialiased transition-colors duration-300;
+    @apply bg-pure-white text-brand-blue font-sans antialiased;
     direction: rtl;
   }
 }
