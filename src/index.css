@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", "IBM Plex Sans Arabic", ui-sans-serif, system-ui, sans-serif;
+  --font-arabic: "IBM Plex Sans Arabic", sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+  
+  --color-brand-blue: #1e3a8a;
+  --color-brand-purple: #7c3aed;
+  --color-pure-white: #ffffff;
+  --color-light-gray: #f8fafc;
+  --color-border-gray: #e2e8f0;
+
+  --bg-main: var(--color-pure-white);
+  --text-main: var(--color-brand-blue);
+  --card-bg: #ffffff;
+  --card-border: var(--color-border-gray);
+  --stat-bg: var(--color-light-gray);
+}
+
+.dark {
+  --bg-main: #0f172a;
+  --text-main: #f1f5f9;
+  --card-bg: #1e293b;
+  --card-border: #334155;
+  --stat-bg: #334155;
+  --color-brand-blue: #94a3b8;
+  --color-border-gray: #334155;
+}
+
+@layer base {
+  body {
+    @apply bg-[var(--bg-main)] text-[var(--text-main)] font-sans antialiased transition-colors duration-300;
+    direction: rtl;
+  }
+}
+
+.card-shadow {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.minimal-border {
+  @apply border border-border-gray;
+}
